@@ -10,6 +10,7 @@
 */
 
 #include <iostream>
+#include <limits>
 
 void printGrid(int grid[10][10]) {
 	//prints out a player's complete hud
@@ -55,7 +56,7 @@ void placeShips(int grid[10][10]){
 		
 }
 
-int fire(int fgrid[10][10], int tgrid[10][10], int hp){
+bool fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	char x;
 	int y;
 //	bool hit = false;
@@ -64,7 +65,7 @@ int fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	std::cin >> x;
 	std::cout << "Enter y coordinate: ";
 	std::cin >> y;
-	std::cout << "("<< x << ',' << y << ") ... ";
+	std::cout << "("<< x << ',' << y << ") ... \n";
 
 	// x-65 uses char as int, subtracts to start counting from 0, y is 1-10 so adjusts to 0-9
 	x -= 65, y -= 1;
@@ -72,28 +73,21 @@ int fire(int fgrid[10][10], int tgrid[10][10], int hp){
 //		hit = true;
 		fgrid[y][x] = 1;
 		tgrid[y][x] = 1;
-		std::cout << "HIT!!!" << std::endl;
-		return --hp;
+		return true;
 	}
 	else {
 		tgrid[y][x] = -1;	
-		std::cout << "MISS" << std::endl;
-		return hp;
+		return false;
 	}
 }
 
 
 int main(void){
-/*	int garbage = 0;	
-	//Initialize Game
-	system("clear");		//clears console window in linux
-	std::cout << "\n\n\n\n\nPLAYER ONE\nPRESS ENTER" << std::endl;
-	std::cin >> garbage;
-	system("clear");		//clears console window in linux
-	
-*/	
+
 	system("clear");
 	bool gameover = false;
+	char turn;
+	bool hit = false;
 
 	//Player1
 	int targetp1[10][10] = {};
@@ -104,51 +98,92 @@ int main(void){
 	int targetp2[10][10] = {};
 	int fleetp2[10][10] = {};
 	int p2hp = 17;
-
+	
 	placeShips(fleetp1);
 	placeShips(fleetp2);
 		
-	std::cout << "\t  TARGETING HUD1 " << std::endl;
-	printGrid(targetp1);
-
-	std::cout << "\t  FLEET HUD " << std::endl;
-	printGrid(fleetp1);
-
 	while(!gameover) {
+		system("clear");			
+		std::cout << "\t  PLAYER 1 READY\n";
+		getchar();
+		getchar();
 
-		p2hp = fire(fleetp2,targetp1, p2hp);
-		
-		std::cout << "\t  TARGETING HUD1 " << std::endl;
+		std::cout << "\t  TARGETING HUD PLAYER 1 " << std::endl;
 		printGrid(targetp1);
-	
-		std::cout << "\t  FLEET HUD " << std::endl;
+
+		std::cout << "\t  FLEET HUD PLAYER 1 " << std::endl;
 		printGrid(fleetp1);
 
+		hit = fire(fleetp2,targetp1, p2hp);
+
+		system("clear");
+		std::cout << "\t  TARGETING HUD PLAYER 1 " << std::endl;
+		printGrid(targetp1);
+	
+		std::cout << "\t  FLEET HUD PLAYER 1 " << std::endl;
+		printGrid(fleetp1);
+		if (hit) {
+			std::cout << "HIT!!!" << std::endl;
+			p2hp--;
+			hit = false;
+		}
+		else {
+			std::cout << "MISS" << std::endl;
+		}
 
 		if(p2hp == 0) {
 			gameover = true;
-			std::cout << "GAME OVER... YOU WIN!!!" << std::endl;
+			std::cout << "GAME OVER... PLAYER 1 WINS!!!" << std::endl;
+			return 0;
 		}
-	}
-/*
-	system("clear");
-	std::cout << "\t  TARGETING HUD1 " << std::endl;
-	printGrid(targetp1);
 
-	std::cout << "\t  FLEET HUD " << std::endl;
-	printGrid(fleetp1);
-*/
+		std::cout << "END TURN? (Y/Q)";
+		getchar();
+		turn = getchar();
+//		if (turn = 'q'){
+//			return 0;
+//		}
+		system("clear");
+		std::cout << "\t  PLAYER 2 READY\n";
+		getchar();
+		getchar();
+
+		std::cout << "\t  TARGETING HUD PLAYER 2 " << std::endl;
+		printGrid(targetp2);
+
+		std::cout << "\t  FLEET HUD PLAYER 2 " << std::endl;
+		printGrid(fleetp2);
+
+
+		hit = fire(fleetp1,targetp2, p1hp);
+
+		system("clear");	
+		std::cout << "\t  TARGETING HUD PLAYER 2 " << std::endl;
+		printGrid(targetp2);
 	
-/*	system("clear");		//clears console window in linux
-	std::cout << "\n\n\n\n\nPLAYER TWO\nPRESS ENTER" << std::endl;
-	std::cin >> garbage;
-	system("clear");		//clears console window in linux
+		std::cout << "\t  FLEET HUD PLAYER 2 " << std::endl;
+		printGrid(fleetp2);
+		if (hit) {
+			std::cout << "HIT!!!" << std::endl;
+			p1hp--;
+			hit = false;
+		}
+		else {
+			std::cout << "MISS" << std::endl;
+		}
 
-	std::cout << "\t  TARGETING HUD2 " << std::endl;
-	printGrid(targetp2);
+		if(p1hp == 0) {
+			gameover = true;
+			std::cout << "GAME OVER... PLAYER 2 WINS!!!" << std::endl;
+			return 0;
+			}
 
-	std::cout << "\t  FLEET HUD " << std::endl;
-	printGrid(fleetp2);
-*/	
+		std::cout << "END TURN? (Y/Q)";
+		getchar();
+		turn = getchar();	
+//		if (turn = 'q'){
+//			return 0;
+//		}
+	}	
 	return 0;
 }
