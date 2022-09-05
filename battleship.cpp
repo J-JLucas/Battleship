@@ -10,7 +10,6 @@
 */
 
 #include <iostream>
-#include <limits>
 
 void printGrid(int grid[10][10]) {
 	//prints out a player's complete hud
@@ -61,11 +60,12 @@ bool fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	int y;
 //	bool hit = false;
 
-	std::cout << "Enter x coodinate: ";
+	std::cout << "Enter x coodinate: " << std::endl;
 	std::cin >> x;
-	std::cout << "Enter y coordinate: ";
+	std::cout << "Enter y coordinate: " << std::endl;
 	std::cin >> y;
 	std::cout << "("<< x << ',' << y << ") ... \n";
+	getchar();
 
 	// x-65 uses char as int, subtracts to start counting from 0, y is 1-10 so adjusts to 0-9
 	x -= 65, y -= 1;
@@ -106,7 +106,6 @@ int main(void){
 		system("clear");			
 		std::cout << "\t  PLAYER 1 READY\n";
 		getchar();
-		getchar();
 
 		std::cout << "\t  TARGETING HUD PLAYER 1 " << std::endl;
 		printGrid(targetp1);
@@ -139,7 +138,7 @@ int main(void){
 
 		std::cout << "END TURN? (Y/Q)";
 		getchar();
-		turn = getchar();
+//		turn = getchar();
 //		if (turn = 'q'){
 //			return 0;
 //		}
@@ -180,7 +179,7 @@ int main(void){
 
 		std::cout << "END TURN? (Y/Q)";
 		getchar();
-		turn = getchar();	
+//		turn = getchar();	
 //		if (turn = 'q'){
 //			return 0;
 //		}
