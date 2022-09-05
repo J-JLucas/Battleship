@@ -11,8 +11,22 @@
 
 #include <iostream>
 
-void printGrid(int grid[10][10]) {
-	//prints out a player's complete hud
+void clear(){
+	system("clear");
+	return;
+}
+
+void printGrid(int grid[10][10], int turn, bool fleet) {
+	//determines which heading
+	if(fleet) {
+		std::cout << "          FLEET HUD PLAYER " << turn << std::endl;
+		
+	}
+	else {
+		std::cout << "        TARGETING HUD PLAYER " << turn << std::endl;
+	}
+
+	//prints out a player grid hud
 	std::cout << "     A  B  C  D  E  F  G  H  I  J  \n"
 	   	     "   +------------------------------+\n";
 	for(int i = 0; i < 10; i++){
@@ -30,7 +44,15 @@ void printGrid(int grid[10][10]) {
 		std::cout << "|" << std::endl;
 	}
 	std::cout << "   +------------------------------+\n";
+	return;
+}
 
+void playerSplash(int turn){
+	clear();
+	std::cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+  			"		PLAYER " << turn << "\n";
+	getchar();
+	clear();
 	return;
 }
 
@@ -54,6 +76,23 @@ void placeShips(int grid[10][10]){
 	}
 		
 }
+
+bool playerTurn(){
+	//draw player splash (enter to continue)
+	//draw player hud
+	//take coordinates
+	//check cooridinates
+	//update results
+		//update targeting array
+			//if hit:
+			//update enemy ship array
+			//update enemy ship health
+			//is game over?
+	//redraw updated player hud
+	//prompt to end turn
+	return false;
+}
+
 
 bool fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	char x;
@@ -81,12 +120,10 @@ bool fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	}
 }
 
-
 int main(void){
 
-	system("clear");
 	bool gameover = false;
-	char turn;
+	int turn = 1;
 	bool hit = false;
 
 	//Player1
@@ -101,26 +138,20 @@ int main(void){
 	
 	placeShips(fleetp1);
 	placeShips(fleetp2);
-		
+	
+	clear();	
 	while(!gameover) {
-		system("clear");			
-		std::cout << "\t  PLAYER 1 READY\n";
-		getchar();
-
-		std::cout << "\t  TARGETING HUD PLAYER 1 " << std::endl;
-		printGrid(targetp1);
-
-		std::cout << "\t  FLEET HUD PLAYER 1 " << std::endl;
-		printGrid(fleetp1);
+		//PLAYER ONE'S TURN
+		playerSplash(turn);
+		printGrid(targetp1, turn, false);
+		printGrid(fleetp1, turn, true);
 
 		hit = fire(fleetp2,targetp1, p2hp);
 
-		system("clear");
-		std::cout << "\t  TARGETING HUD PLAYER 1 " << std::endl;
-		printGrid(targetp1);
-	
-		std::cout << "\t  FLEET HUD PLAYER 1 " << std::endl;
-		printGrid(fleetp1);
+		clear();
+		printGrid(targetp1, turn, false);
+		printGrid(fleetp1, turn, true);
+		
 		if (hit) {
 			std::cout << "HIT!!!" << std::endl;
 			p2hp--;
@@ -135,33 +166,22 @@ int main(void){
 			std::cout << "GAME OVER... PLAYER 1 WINS!!!" << std::endl;
 			return 0;
 		}
-
+		turn++;
 		std::cout << "END TURN? (Y/Q)";
 		getchar();
-//		turn = getchar();
-//		if (turn = 'q'){
-//			return 0;
-//		}
-		system("clear");
-		std::cout << "\t  PLAYER 2 READY\n";
-		getchar();
-		getchar();
 
-		std::cout << "\t  TARGETING HUD PLAYER 2 " << std::endl;
-		printGrid(targetp2);
 
-		std::cout << "\t  FLEET HUD PLAYER 2 " << std::endl;
-		printGrid(fleetp2);
-
+		// PLAYER TWO'S TURN
+		playerSplash(turn);
+		printGrid(targetp2, turn, false);
+		printGrid(fleetp2, turn, true);
 
 		hit = fire(fleetp1,targetp2, p1hp);
 
-		system("clear");	
-		std::cout << "\t  TARGETING HUD PLAYER 2 " << std::endl;
-		printGrid(targetp2);
-	
-		std::cout << "\t  FLEET HUD PLAYER 2 " << std::endl;
-		printGrid(fleetp2);
+		clear();	
+		printGrid(targetp2, turn, false);
+		printGrid(fleetp2, turn, true);
+
 		if (hit) {
 			std::cout << "HIT!!!" << std::endl;
 			p1hp--;
@@ -176,13 +196,9 @@ int main(void){
 			std::cout << "GAME OVER... PLAYER 2 WINS!!!" << std::endl;
 			return 0;
 			}
-
+		turn--;
 		std::cout << "END TURN? (Y/Q)";
 		getchar();
-//		turn = getchar();	
-//		if (turn = 'q'){
-//			return 0;
-//		}
 	}	
 	return 0;
 }
