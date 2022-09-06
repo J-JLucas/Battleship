@@ -16,6 +16,30 @@ void clear(){
 	return;
 }
 
+class Player{
+	public:
+		int targetGrid[10][10] = {};
+		int fleetGrid[10][10] = {};
+		int fleetHP = 17;
+		bool isDead = false;
+
+/*
+class Ship {
+	public:
+		//name goes here
+		int hp = hp;
+		//position goes here
+		//head
+		//hx
+		//hy
+		//tail
+		//tx
+		//ty
+		bool isSunk = false;
+
+};
+*/
+
 void printGrid(int grid[10][10], int turn, bool fleet) {
 	//determines which heading
 	if(fleet) {
@@ -120,48 +144,43 @@ bool fire(int fgrid[10][10], int tgrid[10][10], int hp){
 	}
 }
 
+};
 int main(void){
 
 	bool gameover = false;
 	int turn = 1;
 	bool hit = false;
-
-	//Player1
-	int targetp1[10][10] = {};
-	int fleetp1[10][10] = {};
-	int p1hp = 17;
-
-	//Player2
-	int targetp2[10][10] = {};
-	int fleetp2[10][10] = {};
-	int p2hp = 17;
 	
-	placeShips(fleetp1);
-	placeShips(fleetp2);
+	// instantiate players	
+	Player p1;
+	Player p2;
+	
+	p1.placeShips(p1.fleetGrid);
+	p2.placeShips(p2.fleetGrid);
 	
 	clear();	
 	while(!gameover) {
 		//PLAYER ONE'S TURN
-		playerSplash(turn);
-		printGrid(targetp1, turn, false);
-		printGrid(fleetp1, turn, true);
+		p1.playerSplash(turn);
+		p1.printGrid(p1.targetGrid, turn, false);
+		p1.printGrid(p1.fleetGrid, turn, true);
 
-		hit = fire(fleetp2,targetp1, p2hp);
+		hit = p1.fire(p2.fleetGrid,p1.targetGrid, p2.fleetHP);
 
 		clear();
-		printGrid(targetp1, turn, false);
-		printGrid(fleetp1, turn, true);
+		p1.printGrid(p1.targetGrid, turn, false);
+		p1.printGrid(p1.fleetGrid, turn, true);
 		
 		if (hit) {
 			std::cout << "HIT!!!" << std::endl;
-			p2hp--;
+			p2.fleetHP--;
 			hit = false;
 		}
 		else {
 			std::cout << "MISS" << std::endl;
 		}
 
-		if(p2hp == 0) {
+		if(p2.fleetHP == 0) {
 			gameover = true;
 			std::cout << "GAME OVER... PLAYER 1 WINS!!!" << std::endl;
 			return 0;
@@ -172,26 +191,26 @@ int main(void){
 
 
 		// PLAYER TWO'S TURN
-		playerSplash(turn);
-		printGrid(targetp2, turn, false);
-		printGrid(fleetp2, turn, true);
+		p2.playerSplash(turn);
+		p2.printGrid(p2.targetGrid, turn, false);
+		p2.printGrid(p2.fleetGrid, turn, true);
 
-		hit = fire(fleetp1,targetp2, p1hp);
+		hit = p2.fire(p1.fleetGrid,p2.targetGrid, p1.fleetHP);
 
 		clear();	
-		printGrid(targetp2, turn, false);
-		printGrid(fleetp2, turn, true);
+		p2.printGrid(p2.targetGrid, turn, false);
+		p2.printGrid(p2.fleetGrid, turn, true);
 
 		if (hit) {
 			std::cout << "HIT!!!" << std::endl;
-			p1hp--;
+			p1.fleetHP--;
 			hit = false;
 		}
 		else {
 			std::cout << "MISS" << std::endl;
 		}
 
-		if(p1hp == 0) {
+		if(p1.fleetHP == 0) {
 			gameover = true;
 			std::cout << "GAME OVER... PLAYER 2 WINS!!!" << std::endl;
 			return 0;
